@@ -1,2 +1,4 @@
-# elm-html-parser
-> Monadic html parser combinator library for Elm
+# Elm Parser
+> Basic parser combinator library for Elm
+
+## Usage
