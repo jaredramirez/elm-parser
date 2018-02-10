@@ -48,15 +48,75 @@ Err
 
 In the `run2` example, you are givin the `state` of the parser at the moment of failure and the `Problem` with the parse operation.
 
-You can look all the possible types of `Problem`'s [here](https://github.com/jaredramirez/elm-parser/blob/master/src/Parser.elm#L66).
+You can look all the possible types of `Problem`'s [here](https://github.com/jaredramirez/elm-parser/blob/master/src/Parser.elm#L56).
 
-## Other notes
+## How it works
+Take the parser from the above example.
+```
+1 |    transform : Int -> Int -> ( Int, Int )
+2 |    transform x y = (x, y)
 
-* The primary thing of interest in this package is `Parser.Html`
-* This package was written primary as a learning expereince for me
+3 |    tuple : Parser ( Int, Int )
+4 |    tuple =
+5 |        Parser.succeed transform
+6 |            |* Char.char '('
+7 |            |= Number.naturalNumber
+8 |            |* Char.char ','
+9 |            |= Number.naturalNumber
+10|            |* Char.char ')'
+```
+First, we create the function `trasnform` that takes two `Int`s, and puts them in a tuple. Then in line 5, we are taking the function `transform`, and lifting it into a "parser".
+In each of the subsequent parts of the pipline, we are applying parsers to the function.
+If the parser in the pipline is preceeded by
+ * `|*`, it means "run is parser and make sure it is successful, then **throw away** the result".
+ * `|=`, it means "run is parser and make sure it is successful, then **apply** the result to the function".
+ 
+ So in this case, `transform` has two arguements, so in our pipeline we must have two `|=` to get a result, otherwise `transform` won't have all of it's arguements applied!
+ 
+For more on this pipeline parser concept, see [this](https://github.com/elm-tools/parser#parser-pipelines).
+ 
+You can also use this library by applying parsers with `andThen`:
+```
+tuple2 : Parser ( Int, Int )
+tuple2 =
+    Char.char '('
+        |> Parser.andThen (always Number.naturalNumber)
+        |> Parser.andThen
+            (\x ->
+                Char.char ','
+                    |> Parser.andThen (always Number.naturalNumber)
+                    |> Parser.andThen
+                        (\y ->
+                            Char.char ')'
+                                |> always (Parser.succeed ( x, y ))
+                        )
+            )
+```
+Generally not as readable as using the pipeline-style parsing, but it can be helpeful to have. Say you only want tuples where the values are equal. `(1,1)` would pass, but `(1,2)` would not.
+You can implement the the same function easily with `andThen`:
+```
+tuple2 : Parser ( Int, Int )
+tuple2 =
+    Char.char '('
+        |> Parser.andThen (always Number.naturalNumber)
+        |> Parser.andThen
+            (\x ->
+                Char.char ','
+                    |> Parser.andThen (always Number.naturalNumber)
+                    |> Parser.andThen
+                        (\y ->
+                            Char.char ')'
+                                |> (\_ ->
+                                        if x == y then
+                                            Parser.succeed ( x, y )
+                                        else
+                                            Parser.fail (Parser.Bad "I expectd the values to match")
+                                   )
+                        )
+            )
+```
 
 ## Thanks
-
-A big thanks to the following, as they taught me alot about parsers in a functional language and are great resources.
+While I wrote all of the code in this package, most of it was heavily influenced/inspired by others (with the exception of `Parser.Html`). This package was written for the purpose of my learning, and I figured I'd publish it for kicks. So, a big thanks to the following as they taught me a lot about parsers in a functional language, and are great resources.
 * http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf
 * https://github.com/elm-tools/parser
