@@ -2,11 +2,9 @@
 
 > General purpose parser library for Elm
 
+`elm-package install jaredramirez/elm-parser`
+
 ## Usage
-
-* Install with `elm-package install jaredramirez/elm-parser`
-* Import and use!
-
 ```
 module Sample exposing (..)
 
