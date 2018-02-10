@@ -1,6 +1,5 @@
 module Parser.Html exposing (..)
 
-import Lazy
 import String
 import Dict exposing (Dict)
 import Parser as P exposing (Parser, Problem(..), Status(..), (|=), (|*))

@@ -22,16 +22,16 @@ naturalNumber =
             Misc.foldl1 op <|
                 List.map (\c -> (Char.toCode c) - (Char.toCode '0')) chars
     in
-        PComb.oneOrMore PChar.digit
-            |> P.andThen
-                (\digits ->
-                    case eval digits of
-                        Just int ->
-                            P.succeed int
+        P.andThen
+            (\digits ->
+                case eval digits of
+                    Just int ->
+                        P.succeed int
 
-                        Nothing ->
-                            P.fail (Bad "naturalNumber interal error")
-                )
+                    Nothing ->
+                        P.fail (Bad "naturalNumber interal error")
+            )
+            (PComb.oneOrMore PChar.digit)
 
 
 {-| Parse an number, including positive and negative numbers
@@ -48,7 +48,7 @@ int =
                     Fail _ _ ->
                         ( state, identity )
         in
-            (P.andThen naturalNumber <| \num -> P.succeed (func num)) state_
+            (P.andThen (\num -> P.succeed (func num)) naturalNumber) state_
 
 
 {-| Parse a float
@@ -69,15 +69,15 @@ float =
                 )
                 |= int
                 |= P.andThen
-                    (P.oneOf [ PChar.char '.', P.succeed failPlaceholder ])
                     (\val ->
                         if val == failPlaceholder then
                             P.succeed 0
                         else
                             naturalNumber
                     )
+                    (P.oneOf [ PChar.char '.', P.succeed failPlaceholder ])
     in
-        P.andThen result
+        P.andThen
             (\resultFloat ->
                 case resultFloat of
                     Ok float ->
@@ -86,3 +86,4 @@ float =
                     Err _ ->
                         P.fail <| Bad "I expected a valid float"
             )
+            result
