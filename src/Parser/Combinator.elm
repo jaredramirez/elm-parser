@@ -1,4 +1,17 @@
-module Parser.Combinator exposing (..)
+module Parser.Combinator
+    exposing
+        ( zeroOrMore
+        , oneOrMore
+        , exactly
+        , separateByOne
+        , brackets
+        )
+
+{-| Helpers to combine parsers
+
+@docs zeroOrMore, oneOrMore, exactly, separateByOne, brackets
+
+-}
 
 import Parser as P exposing (Parser, (|=), (|*))
 

@@ -1,10 +1,17 @@
 {
-  "version": "0.0.1",
+  "version": "1.0.0",
   "summary": "elm-html-parser",
   "repository": "https://github.com/jaredramirez/elm-parser.git",
   "license": "BSD-3-Clause",
   "source-directories": ["src"],
-  "exposed-modules": [],
+  "exposed-modules": [
+    "Parser",
+    "Parser.Char",
+    "Parser.Combinator",
+    "Parser.Html",
+    "Parser.Number",
+    "Parser.String"
+  ],
   "dependencies": {
     "elm-lang/core": "5.0.0 <= v < 6.0.0"
   },

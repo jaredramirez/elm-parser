@@ -2,7 +2,6 @@ module Parser
     exposing
         ( Parser
         , State
-        , Status(..)
         , Problem(..)
         , lazy
         , succeed
@@ -19,36 +18,60 @@ module Parser
         , run
         )
 
+{-| General parser combinator library for Elm. It also incldues an HTML parser!
+
+
+# Parsing
+
+@docs Parser, run
+
+
+# Chaining
+
+@docs map, map2, (|=), (|*), andThen, oneOf, oneOfBacktrack
+
+
+# Error Handling
+
+@docs Problem, State
+
+
+# Advanced
+
+@docs lazy, succeed, fail
+
+
+# Low Level
+
+@docs item, satisfy
+
+-}
+
 import String
 import List
+import Parser.Internal as Internal exposing (Status(..))
 import Misc
 
 
 -- TYPES
 
 
-{-| Parser type
+{-| A parser. Is a function that will parse a string into the type of `value`
 -}
 type alias Parser value =
-    State -> Status value
+    Internal.Parser Problem value
 
 
-{-| Result of a parse operation
+{-| The curren status of a parse operation
 -}
-type Status result
-    = Pass State result
-    | Fail State Problem
+type alias Status value =
+    Internal.Status Problem value
 
 
-{-| State that is passed through each parse operation and keeps data about the
-operation as it goes.
+{-| The curren state of a parser
 -}
 type alias State =
-    { source : String
-    , offset : Int
-    , row : Int
-    , col : Int
-    }
+    Internal.State
 
 
 {-| Possible errors that can be encountered while parsing
@@ -316,7 +339,11 @@ both. Apply the result from parserB to the function from parserA
 -}
 initialState : String -> State
 initialState source =
-    State source 0 1 1
+    { source = source
+    , offset = 0
+    , row = 1
+    , col = 1
+    }
 
 
 {-| Wrap a source string into a default state

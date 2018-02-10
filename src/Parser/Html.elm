@@ -1,8 +1,19 @@
-module Parser.Html exposing (..)
+module Parser.Html
+    exposing
+        ( Node
+        , textNode
+        , elementNode
+        )
+
+{-| Pre-made parsers to parse & model HTML elements
+
+@docs Node, textNode, elementNode
+
+-}
 
 import String
 import Dict exposing (Dict)
-import Parser as P exposing (Parser, Problem(..), Status(..), (|=), (|*))
+import Parser as P exposing (Parser, Problem(..), (|=), (|*))
 import Parser.Char
     exposing
         ( charCustomError
@@ -20,6 +31,8 @@ import Parser.Combinator exposing (zeroOrMore, oneOrMore)
 -- TYPES
 
 
+{-| An HTML element
+-}
 type Node
     = Element Name Properties Children
     | Text String
@@ -51,7 +64,7 @@ property =
         |= (string lower)
         |* (charCustomError '=' (ExpectedSymbol "equals"))
         |* (charCustomError '"' (ExpectedSymbol "double quote"))
-        |= (string alphanumeric)
+        |= (string <| P.oneOf [ space, alphanumeric ])
         |* (charCustomError '"' (ExpectedSymbol "double quote"))
 
 
@@ -99,6 +112,8 @@ closeTag =
 -- TEXT NODE
 
 
+{-| A parser for a text node
+-}
 textNode : Parser Node
 textNode =
     P.succeed identity
@@ -132,6 +147,8 @@ parseElement =
         |= closeTag
 
 
+{-| A parser for an element node
+-}
 elementNode : Parser Node
 elementNode =
     P.succeed identity

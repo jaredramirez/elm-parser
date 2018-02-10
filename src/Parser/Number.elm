@@ -1,9 +1,16 @@
-module Parser.Number exposing (..)
+module Parser.Number exposing (naturalNumber, int, float)
+
+{-| Pre-made parsers and helpers to create parsers for numbers
+
+@docs naturalNumber, int, float
+
+-}
 
 import Char
 import String
 import Misc
-import Parser as P exposing (Parser, Problem(..), Status(..), (|=), (|*))
+import Parser as P exposing (Parser, Problem(..), (|=), (|*))
+import Parser.Internal exposing (Status(..))
 import Parser.Char as PChar
 import Parser.Combinator as PComb
 

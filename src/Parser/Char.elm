@@ -1,5 +1,11 @@
 module Parser.Char exposing (..)
 
+{-| Pre-made parsers and helpers to create parsers for characters
+
+@docs charCustomError, char, digit, lower, upper, letter, alphanumeric, space, blankspace, newLine, tab
+
+-}
+
 import Char
 import Parser as P exposing (Parser, Problem(..))
 

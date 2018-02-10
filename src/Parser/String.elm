@@ -1,5 +1,11 @@
 module Parser.String exposing (string, word)
 
+{-| Pre-made parsers and helpers to create parsers for strings
+
+@docs string, word
+
+-}
+
 import Parser as P exposing (Parser, Problem(..), (|=), (|*))
 import Parser.Char as PChar
 import Parser.Combinator as PComb
@@ -21,8 +27,6 @@ word s =
     wordHelper s s
 
 
-{-| Helper for word
--}
 wordHelper : String -> String -> Parser String
 wordHelper base s =
     case String.uncons s of
