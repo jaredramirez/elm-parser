@@ -135,10 +135,10 @@ map2 func parserA parserB =
 {-| Transfrom a parser, based on the result of the previous one
 -}
 andThen :
-    Parser resultA
-    -> (resultA -> Parser resultB)
+    (resultA -> Parser resultB)
+    -> Parser resultA
     -> Parser resultB
-andThen parser func =
+andThen func parser =
     \state ->
         case parser state of
             Pass nextState result ->

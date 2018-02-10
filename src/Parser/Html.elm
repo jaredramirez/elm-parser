@@ -137,5 +137,5 @@ elementNode : Parser Node
 elementNode =
     P.succeed identity
         |* zeroOrMore blankspace
-        |= P.andThen (P.lazy <| \() -> parseElement) checkTagNames
+        |= P.andThen checkTagNames (P.lazy <| \() -> parseElement)
         |* zeroOrMore blankspace

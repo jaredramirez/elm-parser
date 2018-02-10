@@ -22,14 +22,16 @@ naturalNumber =
             Misc.foldl1 op <|
                 List.map (\c -> (Char.toCode c) - (Char.toCode '0')) chars
     in
-        P.andThen (PComb.oneOrMore PChar.digit) <|
-            \digits ->
-                case eval digits of
-                    Just int ->
-                        P.succeed int
+        PComb.oneOrMore PChar.digit
+            |> P.andThen
+                (\digits ->
+                    case eval digits of
+                        Just int ->
+                            P.succeed int
 
-                    Nothing ->
-                        P.fail (Bad "naturalNumber interal error")
+                        Nothing ->
+                            P.fail (Bad "naturalNumber interal error")
+                )
 
 
 {-| Parse an number, including positive and negative numbers

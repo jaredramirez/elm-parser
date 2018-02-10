@@ -8,12 +8,11 @@ import Parser as P exposing (Parser, (|=), (|*))
 zeroOrMore : Parser a -> Parser (List a)
 zeroOrMore parser =
     P.oneOf
-        [ (P.andThen parser <|
-            \x ->
-                P.andThen (zeroOrMore parser) <|
-                    \xs ->
-                        P.succeed (x :: xs)
-          )
+        [ parser
+            |> P.andThen
+                (\x ->
+                    P.andThen (\xs -> P.succeed (x :: xs)) (zeroOrMore parser)
+                )
         , (P.succeed [])
         ]
 
