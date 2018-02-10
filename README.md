@@ -30,15 +30,11 @@ run1 =
 run2 =
   Parser.run tuple "(35)"
 ```
-
 `run1` will produce the value:
-
 ```
 Ok (3,3)
 ```
-
 `run2` will produce the value:
-
 ```
 Err
     ( { source = "(35)"
@@ -50,9 +46,9 @@ Err
     )
 ```
 
-In the `run2` example, you are givin the `state` of the parser at the moment of failure and the `Problem` with the parse operatin. It's up to you to take action in the event of a failure.
+In the `run2` example, you are givin the `state` of the parser at the moment of failure and the `Problem` with the parse operation.
 
-You can look all the possible types of `Problem`'s [here](https://github.com/jaredramirez/elm-parser/blob/master/src/Parser.elm#L66)
+You can look all the possible types of `Problem`'s [here](https://github.com/jaredramirez/elm-parser/blob/master/src/Parser.elm#L66).
 
 ## Other notes
 
@@ -62,6 +58,5 @@ You can look all the possible types of `Problem`'s [here](https://github.com/jar
 ## Thanks
 
 A big thanks to the following, as they taught me alot about parsers in a functional language and are great resources.
-\*\*\*\* http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf
-
+* http://www.cs.nott.ac.uk/~pszgmh/monparsing.pdf
 * https://github.com/elm-tools/parser
