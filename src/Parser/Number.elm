@@ -8,7 +8,7 @@ import Parser.Char as PChar
 import Parser.Combinator as PComb
 
 
-{-| Parse a number, excluding negative numbers
+{-| Parse a natural number
 -}
 naturalNumber : Parser Int
 naturalNumber =

@@ -19,7 +19,6 @@ module Parser
         , run
         )
 
-import Lazy exposing (Lazy)
 import String
 import List
 import Misc
@@ -310,18 +309,23 @@ both. Apply the result from parserB to the function from parserA
 
 
 
--- RUNNER
+-- RUN
 
 
-{-| Wrap a source string into a default state
+{-| Wrap a source string into an initial state
 -}
-defaultState : String -> State
-defaultState source =
+initialState : String -> State
+initialState source =
     State source 0 1 1
 
 
 {-| Wrap a source string into a default state
 -}
-run : Parser a -> String -> Status a
+run : Parser a -> String -> Result ( State, Problem ) a
 run parser source =
-    parser <| defaultState source
+    case (parser <| initialState source) of
+        Pass _ a ->
+            Ok a
+
+        Fail state problem ->
+            Err ( state, problem )
