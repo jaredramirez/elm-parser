@@ -76,8 +76,8 @@ First, we create the function `transform` that takes two `Int`s, and puts them i
 In the subsequent parts of the pipline, we are applying parsers to the function `transform`.
 If the parser in the pipline begins with
 
-* `|*`, it means "run is parser and make sure it is successful, then **throw away** the result".
-* `|=`, it means "run is parser and make sure it is successful, then **apply** the result to the function".
+* `|*` it means "run is parser and make sure it is successful, then **throw away** the result".
+* `|=` it means "run is parser and make sure it is successful, then **apply** the result to the function".
 
 This relies on partial function application. In this case, `transform` has two arguements, so in our pipeline we must have two `|=` to get a result, otherwise `transform` won't have all of it's arguements applied!
 
